@@ -1,5 +1,7 @@
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from datetime import datetime
+import pandas
+
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
@@ -29,9 +31,11 @@ def main():
     template = env.get_template('template.html')
 
     age = datetime.today().year - ORGANIZATION_CREATION_YEAR
+    wines = pandas.read_excel('wine.xlsx').to_dict('records')
 
     rendered_page = template.render(
-        age_text=f'{age} {choosing_year_prefix(age)}'
+        age_text=f'{age} {choosing_year_prefix(age)}',
+        wines=wines
     )
 
     with open('index.html', 'w', encoding="utf8") as file:
