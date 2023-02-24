@@ -1,7 +1,7 @@
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from datetime import datetime
 import pandas
-
+import collections
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
@@ -31,11 +31,15 @@ def main():
     template = env.get_template('template.html')
 
     age = datetime.today().year - ORGANIZATION_CREATION_YEAR
-    wines = pandas.read_excel('wine.xlsx').to_dict('records')
+    wines = pandas.read_excel('wine3.xlsx', na_values='-', keep_default_na=False).to_dict('records')
+
+    new_wine_set = collections.defaultdict(list)
+    for wine in wines:
+        new_wine_set[wine['Категория']].append(wine)
 
     rendered_page = template.render(
         age_text=f'{age} {choosing_year_prefix(age)}',
-        wines=wines
+        new_wine_set=new_wine_set
     )
 
     with open('index.html', 'w', encoding="utf8") as file:
