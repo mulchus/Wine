@@ -11,7 +11,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 ORGANIZATION_CREATION_YEAR = 1920
 
 
-def choosing_year_prefix(age):
+def select_year_prefix(age):
     last_dig = age % 10
     if 10 < age < 20:
         year_prefix = 'лет'
@@ -68,7 +68,7 @@ def main():
         new_wine_set[wine['Категория']].append(wine)
 
     rendered_page = template.render(
-        age_text=f'{age} {choosing_year_prefix(age)}',
+        age_text=f'{age} {select_year_prefix(age)}',
         new_wine_set=new_wine_set
     )
 
